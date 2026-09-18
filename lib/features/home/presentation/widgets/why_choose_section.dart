@@ -2,32 +2,40 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/widgets/widgets.dart';
 
-/// "Why CodeNova?" feature grid section on [HomePage].
+/// "Why Choose CodeNova" verified company claims section on [HomePage].
+///
+/// Strictly displays claims verified from the company website ($f array):
+/// 1. Expert Mentors
+/// 2. Hands-on Projects
+/// 3. Verified Certificates
 class WhyChooseSection extends StatelessWidget {
   const WhyChooseSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final claims = MockData.whyChooseUs;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceMD),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader(title: AppStrings.whyChooseTitle),
-          const SizedBox(height: AppDimensions.spaceLG),
-          GridView.builder(
+          // ── Section Header ───────────────────────────────────
+          const SectionHeader(
+            title: AppStrings.whyChooseTitle,
+            subtitle: AppStrings.whyChooseSubtitle,
+          ),
+          const SizedBox(height: AppDimensions.spaceMD),
+
+          // ── Cards Grid / Column ──────────────────────────────
+          ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: AppDimensions.spaceMD,
-              mainAxisSpacing: AppDimensions.spaceMD,
-              childAspectRatio: 1.1,
-            ),
-            itemCount: MockData.whyChooseUs.length,
+            itemCount: claims.length,
+            separatorBuilder: (_, _) =>
+                const SizedBox(height: AppDimensions.spaceMD),
             itemBuilder: (context, index) {
-              final item = MockData.whyChooseUs[index];
-              return _FeatureCard(item: item);
+              return _BenefitCard(item: claims[index]);
             },
           ),
         ],
@@ -36,8 +44,8 @@ class WhyChooseSection extends StatelessWidget {
   }
 }
 
-class _FeatureCard extends StatelessWidget {
-  const _FeatureCard({required this.item});
+class _BenefitCard extends StatelessWidget {
+  const _BenefitCard({required this.item});
 
   final FeatureItem item;
 
@@ -45,38 +53,48 @@ class _FeatureCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
 
-    return AppCard.glass(
+    return AppCard(
       padding: const EdgeInsets.all(AppDimensions.spaceMD),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Icon Circle
           Container(
-            width: 40,
-            height: 40,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              gradient: AppColors.brandGradient,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusSM),
+              color: AppColors.primary.withAlpha(20),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
             ),
             child: Icon(
               item.icon,
-              color: Colors.white,
-              size: 20,
+              color: AppColors.primary,
+              size: AppDimensions.iconMD,
             ),
           ),
-          const SizedBox(height: AppDimensions.spaceSM),
-          Text(
-            item.title,
-            style: tt.titleMedium?.copyWith(fontSize: AppTextSizes.body),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: AppDimensions.spaceXS),
+          const SizedBox(width: AppDimensions.spaceMD),
+
+          // Text Content
           Expanded(
-            child: Text(
-              item.description,
-              style: tt.bodySmall,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  style: tt.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppTextSizes.bodyLg,
+                  ),
+                ),
+                const SizedBox(height: AppDimensions.spaceXXS),
+                Text(
+                  item.description,
+                  style: tt.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                    height: 1.45,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

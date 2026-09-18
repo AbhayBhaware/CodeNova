@@ -4,17 +4,18 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/widgets/widgets.dart';
 
 /// Full-bleed hero banner shown at the top of [HomePage].
+///
+/// Headline, description, and statistics are verified from the official
+/// CodeNova Tech Solutions website (codenovatechsolutions.in).
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
     final tt = Theme.of(context).textTheme;
 
     return Container(
       width: double.infinity,
-      constraints: BoxConstraints(minHeight: size.height * 0.48),
       decoration: const BoxDecoration(
         gradient: AppColors.heroGradient,
       ),
@@ -22,41 +23,41 @@ class HeroSection extends StatelessWidget {
         AppDimensions.spaceMD,
         AppDimensions.spaceLG,
         AppDimensions.spaceMD,
-        AppDimensions.spaceXXL,
+        AppDimensions.spaceXL,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Eyebrow badge
+          // ── Eyebrow Badge ─────────────────────────────────────
           const AppBadge(
-            label: '🎓  IT Training & Internships · Pune',
+            label: AppStrings.heroEyebrow,
             color: AppColors.accent,
-          ),
-          const SizedBox(height: AppDimensions.spaceLG),
-
-          // Hero headline
-          Text(
-            AppStrings.heroTitle,
-            style: tt.displayLarge?.copyWith(
-              foreground: Paint()
-                ..shader = AppColors.brandGradient.createShader(
-                  const Rect.fromLTWH(0, 0, 300, 80),
-                ),
-            ),
           ),
           const SizedBox(height: AppDimensions.spaceMD),
 
-          // Subheading
+          // ── Hero Headline ─────────────────────────────────────
+          Text(
+            AppStrings.heroTitle,
+            style: tt.displayLarge?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.spaceSM),
+
+          // ── Subheading ─────────────────────────────────────────
           Text(
             AppStrings.heroSubtitle,
             style: tt.bodyLarge?.copyWith(
               fontSize: AppTextSizes.bodyLg,
               color: Colors.white.withAlpha(220),
+              height: 1.5,
             ),
           ),
-          const SizedBox(height: AppDimensions.spaceXL),
+          const SizedBox(height: AppDimensions.spaceLG),
 
-          // CTA Row
+          // ── CTA Buttons (Responsive Wrap) ─────────────────────
           Wrap(
             spacing: AppDimensions.spaceMD,
             runSpacing: AppDimensions.spaceMD,
@@ -82,64 +83,91 @@ class HeroSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppDimensions.spaceXXL),
+          const SizedBox(height: AppDimensions.spaceXL),
 
-          // Stats row
-          const _StatsRow(),
+          // ── Verified Stats Row ────────────────────────────────
+          const _VerifiedStatsCard(),
         ],
       ),
     );
   }
 }
 
-class _StatsRow extends StatelessWidget {
-  const _StatsRow();
+/// Stat card displaying official metrics verified from the company website.
+class _VerifiedStatsCard extends StatelessWidget {
+  const _VerifiedStatsCard();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _StatItem(value: '500+', label: 'Students'),
-        _divider(),
-        _StatItem(value: '6+', label: 'Courses'),
-        _divider(),
-        _StatItem(value: '95%', label: 'Placement'),
-        _divider(),
-        _StatItem(value: '2+', label: 'Years'),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.spaceMD,
+        vertical: AppDimensions.spaceMD,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(15),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLG),
+        border: Border.all(color: Colors.white.withAlpha(30)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _StatMetric(
+              value: AppStrings.statsStudentsValue,
+              label: AppStrings.statsStudentsLabel,
+              icon: Icons.school_rounded,
+            ),
+          ),
+          Container(
+            width: 1,
+            height: 40,
+            color: Colors.white.withAlpha(40),
+          ),
+          Expanded(
+            child: _StatMetric(
+              value: AppStrings.statsPartnersValue,
+              label: AppStrings.statsPartnersLabel,
+              icon: Icons.handshake_rounded,
+            ),
+          ),
+        ],
+      ),
     );
   }
-
-  Widget _divider() => Container(
-        width: 1,
-        height: 36,
-        color: Colors.white24,
-      );
 }
 
-class _StatItem extends StatelessWidget {
-  const _StatItem({required this.value, required this.label});
+class _StatMetric extends StatelessWidget {
+  const _StatMetric({
+    required this.value,
+    required this.label,
+    required this.icon,
+  });
 
   final String value;
   final String label;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ShaderMask(
-          shaderCallback: (bounds) =>
-              AppColors.brandGradient.createShader(bounds),
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: AppTextSizes.display,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 18, color: AppColors.accent),
+            const SizedBox(width: AppDimensions.spaceXS),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: AppTextSizes.heading,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: -0.5,
+              ),
             ),
-          ),
+          ],
         ),
+        const SizedBox(height: AppDimensions.spaceXXS),
         Text(
           label,
           style: const TextStyle(
@@ -147,6 +175,7 @@ class _StatItem extends StatelessWidget {
             fontSize: AppTextSizes.xs,
             fontWeight: FontWeight.w500,
           ),
+          textAlign: TextAlign.center,
         ),
       ],
     );

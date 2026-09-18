@@ -1,185 +1,220 @@
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
 
-/// Static mock data for CodeNova Tech Solutions.
+/// Central static mock data for CodeNova Tech Solutions.
 ///
-/// Replace each list with a repository/API call when the backend is ready.
-/// All field values reflect actual company offerings from the website.
+/// All course names, descriptions, durations, service categories, and company
+/// benefits strictly match the verified content from the official website
+/// (https://www.codenovatechsolutions.in/).
 abstract final class MockData {
   MockData._();
 
-  // ── Courses ──────────────────────────────────────────────────────────────
+  // ── Verified Programs / Courses ──────────────────────────────
   static const List<CourseModel> courses = [
     CourseModel(
-      id: 'full-stack-web',
-      title: 'Full Stack Web Development',
-      subtitle: 'HTML · CSS · JavaScript · React · Node.js',
+      id: 'full-stack-dev',
+      title: 'Full Stack Development',
+      subtitle: 'HTML · CSS · JavaScript · React · Modern Web',
       description:
-          'A comprehensive end-to-end programme covering front-end and back-end '
-          'development. Build real-world projects from scratch and get job-ready '
-          'with portfolio-grade work.',
-      duration: '4 Months',
+          'Master HTML, CSS, JavaScript, React, and modern web technologies '
+          'to build stunning responsive websites.',
+      duration: '1 Month',
       level: CourseLevel.beginner,
-      tags: ['Web', 'React', 'Node.js', 'MongoDB'],
-      icon: Icons.web_rounded,
+      tags: ['HTML/CSS', 'JavaScript', 'React', 'Full Stack'],
+      icon: Icons.code_rounded,
+      isFeatured: true,
+    ),
+    CourseModel(
+      id: 'android-dev',
+      title: 'Android Development',
+      subtitle: 'Java · Kotlin · Android Studio · Modern Architecture',
+      description:
+          'Learn Java and Kotlin to build powerful, user-friendly Android '
+          'applications from scratch.',
+      duration: '1 Month',
+      level: CourseLevel.beginner,
+      tags: ['Java', 'Kotlin', 'Android', 'Mobile'],
+      icon: Icons.phone_android_rounded,
       isFeatured: true,
     ),
     CourseModel(
       id: 'python-programming',
       title: 'Python Programming',
-      subtitle: 'Core Python · OOP · File Handling · Libraries',
+      subtitle: 'Core Python · OOP · Scripting · Hands-on Projects',
       description:
-          'Master Python from basics to advanced. Ideal for beginners and '
-          'professionals looking to upskill. Covers automation, scripting, and '
-          'real-world problem solving.',
-      duration: '2 Months',
+          'Learn Python from scratch and build real-world applications with '
+          'hands-on projects.',
+      duration: '1 Month',
       level: CourseLevel.beginner,
-      tags: ['Python', 'Automation', 'Scripting'],
+      tags: ['Python', 'OOP', 'Automation', 'Projects'],
       icon: Icons.terminal_rounded,
       isFeatured: true,
     ),
     CourseModel(
-      id: 'ai-ml',
-      title: 'AI & Machine Learning',
-      subtitle: 'Python · Scikit-Learn · TensorFlow · NLP',
+      id: 'java-programming',
+      title: 'Java Programming',
+      subtitle: 'Core Java · OOP · Data Structures · Enterprise',
       description:
-          'Dive into the world of Artificial Intelligence and Machine Learning. '
-          'Learn supervised, unsupervised learning, neural networks, and deploy '
-          'your own ML models.',
-      duration: '3 Months',
-      level: CourseLevel.intermediate,
-      tags: ['AI', 'ML', 'TensorFlow', 'Python'],
-      icon: Icons.psychology_rounded,
-      isFeatured: true,
+          'Learn Java from basics to advanced concepts with hands-on projects '
+          'and real-world scenarios.',
+      duration: '1 Month',
+      level: CourseLevel.beginner,
+      tags: ['Java', 'OOP', 'Enterprise', 'Backend'],
+      icon: Icons.computer_rounded,
+      isFeatured: false,
     ),
     CourseModel(
       id: 'data-science',
       title: 'Data Science',
-      subtitle: 'Python · Pandas · NumPy · Visualization · Statistics',
+      subtitle: 'Python · R · Machine Learning · Data Analysis',
       description:
-          'Learn to collect, clean, analyse, and visualise data. Develop skills '
-          'in statistical thinking and data storytelling that modern companies '
-          'need.',
-      duration: '3 Months',
+          'Learn Python, R, and machine learning to analyze and interpret '
+          'data for actionable insights.',
+      duration: '1 Month',
       level: CourseLevel.intermediate,
-      tags: ['Data', 'Pandas', 'Visualization'],
+      tags: ['Python', 'R', 'Machine Learning', 'Data Analysis'],
       icon: Icons.bar_chart_rounded,
-      isFeatured: false,
+      isFeatured: true,
     ),
     CourseModel(
-      id: 'java-core',
-      title: 'Core Java',
-      subtitle: 'Java SE · OOP · Collections · JDBC',
+      id: 'artificial-intelligence',
+      title: 'Artificial Intelligence',
+      subtitle: 'AI Fundamentals · Neural Networks · Intelligent Systems',
       description:
-          'Build a solid foundation in Java – the language powering enterprise '
-          'software worldwide. Covers OOP principles, collections, exception '
-          'handling, and database connectivity.',
-      duration: '2 Months',
-      level: CourseLevel.beginner,
-      tags: ['Java', 'OOP', 'JDBC'],
-      icon: Icons.code_rounded,
-      isFeatured: false,
-    ),
-    CourseModel(
-      id: 'flutter-mobile',
-      title: 'Flutter Mobile Development',
-      subtitle: 'Dart · Flutter · Firebase · REST APIs',
-      description:
-          'Build beautiful cross-platform apps for Android and iOS using Flutter '
-          'and Dart. Covers state management, Firebase integration, and '
-          'publishing to app stores.',
-      duration: '3 Months',
+          'Learn AI fundamentals, neural networks, and build intelligent '
+          'applications with modern tools.',
+      duration: '1 Month',
       level: CourseLevel.intermediate,
-      tags: ['Flutter', 'Dart', 'Firebase'],
-      icon: Icons.phone_android_rounded,
+      tags: ['AI', 'Neural Networks', 'Intelligent Systems'],
+      icon: Icons.psychology_rounded,
       isFeatured: true,
     ),
   ];
 
-  // ── Internships ───────────────────────────────────────────────────────────
+  // ── Verified Internship Programmes ───────────────────────────
   static const List<InternshipModel> internships = [
     InternshipModel(
-      id: 'web-dev-intern',
-      title: 'Web Development Intern',
-      domain: 'Full Stack Development',
-      duration: '1 – 3 Months',
+      id: 'software-internship-program',
+      title: 'Internship Program',
+      domain: 'Live Client Projects & Software Engineering',
+      duration: '3 – 6 Months',
       description:
-          'Work on live client projects under the guidance of senior developers. '
-          'Gain hands-on experience with React, Node.js, and REST API integration.',
-      skills: ['HTML/CSS', 'JavaScript', 'React', 'Node.js'],
+          'Get real-world experience working on live projects with guidance '
+          'from industry mentors. Build portfolio-grade applications and earn '
+          'a verified industry-recognized certification.',
+      skills: ['Live Projects', 'Mentorship', 'Agile/Git', 'Full Stack'],
       isOpen: true,
     ),
     InternshipModel(
-      id: 'python-intern',
-      title: 'Python Developer Intern',
-      domain: 'Backend Development',
-      duration: '1 – 2 Months',
+      id: 'web-dev-internship',
+      title: 'Web Development Internship',
+      domain: 'Full Stack & Frontend Systems',
+      duration: '3 Months',
       description:
-          'Contribute to Python-based automation and backend projects. Ideal for '
-          'students who have completed or are undergoing Python training.',
-      skills: ['Python', 'Django/Flask', 'REST APIs', 'SQL'],
+          'Contribute to production-grade responsive web applications and '
+          'APIs using modern frameworks under direct senior developer guidance.',
+      skills: ['React', 'JavaScript', 'REST APIs', 'Responsive Design'],
       isOpen: true,
     ),
     InternshipModel(
-      id: 'data-analyst-intern',
-      title: 'Data Analyst Intern',
-      domain: 'Data Science & Analytics',
-      duration: '2 – 3 Months',
+      id: 'python-ai-internship',
+      title: 'Python & AI Internship',
+      domain: 'Data Analytics & Intelligent Applications',
+      duration: '3 Months',
       description:
-          'Analyse real business data, create dashboards, and present insights. '
-          'Work with Python, Excel, and visualization tools.',
-      skills: ['Python', 'Pandas', 'Power BI / Tableau', 'Excel'],
+          'Apply machine learning and Python programming on real-world datasets '
+          'and software automation pipelines.',
+      skills: ['Python', 'Data Science', 'Machine Learning', 'APIs'],
       isOpen: true,
-    ),
-    InternshipModel(
-      id: 'ai-research-intern',
-      title: 'AI/ML Research Intern',
-      domain: 'Artificial Intelligence',
-      duration: '2 – 3 Months',
-      description:
-          'Explore ML models, contribute to research, and implement AI solutions '
-          'for real-world problem statements under expert mentorship.',
-      skills: ['Python', 'TensorFlow', 'Scikit-Learn', 'NLP'],
-      isOpen: false,
     ),
   ];
 
-  // ── Why Choose CodeNova ──────────────────────────────────────────────────
+  // ── Verified IT Services (From CodeNova Website) ─────────────
+  static const List<ServiceModel> services = [
+    ServiceModel(
+      id: 'web-development',
+      title: 'Web Application Development',
+      description:
+          'Modern, scalable web applications and digital platforms tailored '
+          'to business needs with responsive architecture.',
+      icon: Icons.web_rounded,
+      tags: ['React', 'Full Stack', 'Web Portals'],
+    ),
+    ServiceModel(
+      id: 'mobile-development',
+      title: 'Mobile App Development',
+      description:
+          'Native Android and cross-platform mobile applications engineered '
+          'for performance and seamless user engagement.',
+      icon: Icons.phone_android_rounded,
+      tags: ['Android', 'Flutter', 'Cross-Platform'],
+    ),
+    ServiceModel(
+      id: 'ai-solutions',
+      title: 'AI & Machine Learning',
+      description:
+          'Intelligent software solutions, neural network integrations, and '
+          'data-driven automation to transform workflows.',
+      icon: Icons.psychology_rounded,
+      tags: ['AI Models', 'Automation', 'ML Insights'],
+    ),
+    ServiceModel(
+      id: 'cloud-technologies',
+      title: 'Cloud Technologies',
+      description:
+          'Reliable cloud architecture, deployment management, and infrastructure '
+          'solutions built for scale.',
+      icon: Icons.cloud_done_rounded,
+      tags: ['Cloud Deploy', 'Scalability', 'DevOps'],
+    ),
+    ServiceModel(
+      id: 'cybersecurity',
+      title: 'Cybersecurity Solutions',
+      description:
+          'Robust security practices, vulnerability mitigation, and secure '
+          'digital system implementations.',
+      icon: Icons.security_rounded,
+      tags: ['Security', 'Secure Code', 'Protection'],
+    ),
+    ServiceModel(
+      id: 'custom-software',
+      title: 'Custom Software Development',
+      description:
+          'Bespoke digital software engineered to address unique business '
+          'processes and digital transformation goals.',
+      icon: Icons.code_rounded,
+      tags: ['Custom Systems', 'Enterprise', 'Scalable'],
+    ),
+  ];
+
+  // ── Verified Company Claims ("Why Choose CodeNova") ──────────
+  // Exactly matching array $f from the official website
   static const List<FeatureItem> whyChooseUs = [
     FeatureItem(
-      icon: Icons.workspace_premium_rounded,
-      title: 'Industry-Focused Curriculum',
-      description: 'Courses designed with real-world employer requirements in mind.',
-    ),
-    FeatureItem(
-      icon: Icons.people_rounded,
+      icon: Icons.school_rounded,
       title: 'Expert Mentors',
-      description: 'Learn from working professionals with years of industry experience.',
+      description:
+          'Learn from industry professionals with years of real-world '
+          'experience in top tech companies.',
     ),
     FeatureItem(
-      icon: Icons.laptop_mac_rounded,
-      title: 'Hands-On Projects',
-      description: 'Build a portfolio of real projects employers actually notice.',
+      icon: Icons.terminal_rounded,
+      title: 'Hands-on Projects',
+      description:
+          'Build real-world applications and gain practical experience that '
+          'employers value.',
     ),
     FeatureItem(
-      icon: Icons.card_membership_rounded,
-      title: 'Certification',
-      description: 'Receive a recognised certificate upon successful programme completion.',
-    ),
-    FeatureItem(
-      icon: Icons.manage_search_rounded,
-      title: 'Placement Assistance',
-      description: 'Dedicated support with resume building, mock interviews, and job referrals.',
-    ),
-    FeatureItem(
-      icon: Icons.location_on_rounded,
-      title: 'Located in Pune',
-      description: 'Conveniently located in Maharashtra with both online & offline batches.',
+      icon: Icons.verified_rounded,
+      title: 'Verified Certificates',
+      description:
+          'Earn industry-recognized certifications that boost your credibility '
+          'and career prospects.',
     ),
   ];
 }
 
-/// Data model for "Why Choose Us" feature items.
+/// Data model for "Why Choose Us" verified benefit items.
 class FeatureItem {
   const FeatureItem({
     required this.icon,

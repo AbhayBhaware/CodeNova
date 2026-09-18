@@ -149,31 +149,36 @@ class SectionHeader extends StatelessWidget {
               : MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: textAlign == TextAlign.center
-                  ? CrossAxisAlignment.center
-                  : CrossAxisAlignment.start,
-              children: [
-                // Clean accent indicator bar
-                Container(
-                  width: 32,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusCircle),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: textAlign == TextAlign.center
+                    ? CrossAxisAlignment.center
+                    : CrossAxisAlignment.start,
+                children: [
+                  // Clean accent indicator bar
+                  Container(
+                    width: 32,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusCircle),
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppDimensions.spaceSM),
-                Text(
-                  title,
-                  style: tt.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(height: AppDimensions.spaceSM),
+                  Text(
+                    title,
+                    style: tt.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: textAlign,
                   ),
-                  textAlign: textAlign,
-                ),
-              ],
+                ],
+              ),
             ),
-            ?action,
+            if (action != null) ...[
+              const SizedBox(width: AppDimensions.spaceSM),
+              action!,
+            ],
           ],
         ),
         if (subtitle != null) ...[
