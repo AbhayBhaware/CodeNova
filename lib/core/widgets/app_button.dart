@@ -90,6 +90,10 @@ class AppButton extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final radius = borderRadius ?? BorderRadius.circular(AppDimensions.radiusMD);
 
+    final effectiveTextColor = _isDisabled
+        ? colorScheme.onSurface.withAlpha(96)
+        : (foregroundColor ?? _getDefaultTextColor(colorScheme));
+
     Widget content = Row(
       mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -101,24 +105,22 @@ class AppButton extends StatelessWidget {
             child: CircularProgressIndicator(
               strokeWidth: 2,
               valueColor: AlwaysStoppedAnimation<Color>(
-                _getLoadingColor(colorScheme),
+                effectiveTextColor,
               ),
             ),
           ),
           const SizedBox(width: AppDimensions.spaceSM),
         ] else if (icon != null) ...[
-          Icon(icon, size: AppDimensions.iconSM),
+          Icon(icon, size: AppDimensions.iconSM, color: effectiveTextColor),
           const SizedBox(width: AppDimensions.spaceSM),
         ],
         Text(
           label,
-          style: AppTypography.button().copyWith(
-            color: _isDisabled ? colorScheme.onSurface.withAlpha(96) : null,
-          ),
+          style: AppTypography.button(color: effectiveTextColor),
         ),
         if (!isLoading && trailingIcon != null) ...[
           const SizedBox(width: AppDimensions.spaceSM),
-          Icon(trailingIcon, size: AppDimensions.iconSM),
+          Icon(trailingIcon, size: AppDimensions.iconSM, color: effectiveTextColor),
         ],
       ],
     );
@@ -197,7 +199,7 @@ class AppButton extends StatelessWidget {
     );
   }
 
-  Color _getLoadingColor(ColorScheme scheme) {
+  Color _getDefaultTextColor(ColorScheme scheme) {
     switch (variant) {
       case AppButtonVariant.primary:
         return scheme.onPrimary;

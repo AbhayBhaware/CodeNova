@@ -40,40 +40,52 @@ class HomePage extends StatelessWidget {
             backgroundColor: theme.scaffoldBackgroundColor,
             elevation: 0,
             scrolledUnderElevation: 1,
-            title: Row(
-              children: [
-                // Brand logo mark
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.brandGradient,
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusSM),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'CN',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.5,
+            title: InkWell(
+              borderRadius: BorderRadius.circular(AppDimensions.radiusSM),
+              onTap: () => context.go(AppStrings.routeAbout),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppDimensions.spaceXXS,
+                  horizontal: AppDimensions.spaceXS,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Brand logo mark
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        gradient: AppColors.brandGradient,
+                        borderRadius:
+                            BorderRadius.circular(AppDimensions.radiusSM),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'CN',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: AppDimensions.spaceSM + 2),
+                    Flexible(
+                      child: Text(
+                        'CodeNova',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: AppDimensions.spaceSM + 2),
-                Flexible(
-                  child: Text(
-                    'CodeNova',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
+              ),
             ),
             actions: [
               // Notification Icon Placeholder with Unread Dot
@@ -101,6 +113,16 @@ class HomePage extends StatelessWidget {
                 ),
                 tooltip: 'Notifications',
                 onPressed: () => _showNotificationsSheet(context),
+              ),
+
+              // About CodeNova Quick Action
+              IconButton(
+                icon: const Icon(
+                  Icons.info_outline_rounded,
+                  color: AppColors.textSecondary,
+                ),
+                tooltip: 'About CodeNova',
+                onPressed: () => context.go(AppStrings.routeAbout),
               ),
 
               // Profile / Account Quick Action

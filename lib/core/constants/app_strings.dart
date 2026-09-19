@@ -86,4 +86,19 @@ abstract final class AppStrings {
   static const String ctaBannerSubtitle =
       'Connect with CodeNova Tech Solutions in Pune for industry training, internships, and digital enterprise services.';
   static const String ctaBannerButton = 'Get in Touch';
+
+  // ── About CodeNova (Verified from website) ───────────────────
+  static const String aboutTitle = 'About CodeNova';
+  static const String aboutIntro =
+      'At CodeNova Tech Solutions, we believe technology has the power to solve real-world problems and create new opportunities. We are an emerging technology startup dedicated to developing innovative software solutions while helping students and aspiring IT professionals build practical, industry-ready skills.';
+  static const String aboutServicesSummary =
+      'Our work focuses on delivering reliable digital solutions tailored to the needs of businesses and individuals. From web and mobile application development to AI, cloud technologies, cybersecurity, and custom software, we are committed to creating solutions that are modern, scalable, and user-focused.';
+  static const String aboutEducationSummary =
+      'Alongside our technology services, we are passionate about education. Through internships, technical training, and hands-on projects, we aim to give learners the practical experience and confidence needed to succeed in today\'s fast-changing technology industry.';
+  static const String aboutValuesSummary =
+      'As a growing company, we value innovation, integrity, continuous learning, and customer satisfaction. Every project we undertake is guided by a commitment to quality, collaboration, and long-term impact.';
+  static const String aboutTrainingTitle = 'Training & Internship Focus';
+  static const String aboutTrainingSubtitle =
+      'Industry-aligned technical education and experiential internship tracks.';
 }
+

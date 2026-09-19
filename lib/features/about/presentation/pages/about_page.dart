@@ -1,170 +1,137 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/widgets/widgets.dart';
+import '../../../../core/utils/app_utils.dart';
+import '../widgets/about_widgets.dart';
 
-/// About page – company background, mission, and team introduction.
-/// Content from https://www.codenovatechsolutions.in/
+/// Premium About Company screen for CodeNova Tech Solutions.
+///
+/// Features exclusively verified content from the official company website:
+/// - Hero branding banner with verified tagline and Pune location
+/// - Company overview narrative and 4 core values
+/// - Mission & Vision statements
+/// - 6 Core IT Enterprise Services
+/// - Training and Internship focus with 3 core pillars
+/// - Company contact details with direct phone, email, web actions, and enquiry CTA
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.navAbout)),
-      body: ListView(
-        padding: AppDimensions.screenPadding,
-        children: [
-          const SizedBox(height: AppDimensions.spaceMD),
-
-          // ── Who We Are ──────────────────────────────────────
-          const SectionHeader(title: 'Who We Are'),
-          const SizedBox(height: AppDimensions.spaceMD),
-          Text(
-            'CodeNova Tech Solutions is a Pune-based IT training and internship '
-            'centre dedicated to bridging the gap between academic learning and '
-            'industry demands. We equip students and fresh graduates with the '
-            'practical skills, tools, and confidence they need to launch '
-            'successful tech careers.',
-            style: tt.bodyLarge,
+      appBar: AppBar(
+        title: const Text('About CodeNova'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          tooltip: 'Back',
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go(AppStrings.routeHome);
+            }
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.language_rounded),
+            tooltip: 'Visit Official Website',
+            onPressed: () => AppUtils.launchWebUrl(AppStrings.website),
           ),
-          const SizedBox(height: AppDimensions.spaceXXL),
-
-          // ── Mission & Vision ────────────────────────────────
-          const SectionHeader(title: 'Mission & Vision'),
-          const SizedBox(height: AppDimensions.spaceMD),
-          AppCard.glass(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _InfoRow(
-                  icon: Icons.flag_rounded,
-                  label: 'Mission',
-                  value:
-                      'To make quality IT education accessible and transform every '
-                      'student into an industry-ready professional.',
-                ),
-                const SizedBox(height: AppDimensions.spaceLG),
-                _InfoRow(
-                  icon: Icons.visibility_rounded,
-                  label: 'Vision',
-                  value:
-                      'To become the most trusted IT training partner in Maharashtra, '
-                      'known for real-world outcomes and student success.',
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppDimensions.spaceXXL),
-
-          // ── Company Details ──────────────────────────────────
-          const SectionHeader(title: 'Company Details'),
-          const SizedBox(height: AppDimensions.spaceMD),
-          AppCard.glass(
-            child: Column(
-              children: [
-                _DetailRow(
-                    icon: Icons.location_on_rounded,
-                    label: 'Location',
-                    value: AppStrings.address),
-                const Divider(height: AppDimensions.spaceXL),
-                _DetailRow(
-                    icon: Icons.phone_rounded,
-                    label: 'Phone',
-                    value: AppStrings.phone),
-                const Divider(height: AppDimensions.spaceXL),
-                _DetailRow(
-                    icon: Icons.email_rounded,
-                    label: 'Email',
-                    value: AppStrings.email),
-                const Divider(height: AppDimensions.spaceXL),
-                _DetailRow(
-                    icon: Icons.language_rounded,
-                    label: 'Website',
-                    value: AppStrings.website),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppDimensions.spaceXL),
         ],
       ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(AppDimensions.spaceSM),
-          decoration: BoxDecoration(
-            gradient: AppColors.brandGradient,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusSM),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          // ── Hero Banner ───────────────────────────────────
+          const SliverToBoxAdapter(
+            child: AboutHeroHeader(),
           ),
-          child: Icon(icon, color: Colors.white, size: 18),
-        ),
-        const SizedBox(width: AppDimensions.spaceMD),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label,
-                  style: tt.labelLarge?.copyWith(color: AppColors.accent)),
-              const SizedBox(height: AppDimensions.spaceXS),
-              Text(value, style: tt.bodyMedium),
-            ],
+
+          // ── Section 1: About CodeNova & Core Values ───────
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: AppDimensions.spaceXL),
+              child: AboutStorySection(),
+            ),
           ),
-        ),
-      ],
-    );
-  }
-}
 
-class _DetailRow extends StatelessWidget {
-  const _DetailRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.accent, size: AppDimensions.iconMD),
-        const SizedBox(width: AppDimensions.spaceMD),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: tt.bodySmall),
-              Text(value,
-                  style:
-                      tt.bodyMedium?.copyWith(color: AppColors.textPrimary)),
-            ],
+          // ── Section 2: Mission & Vision ───────────────────
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: AppDimensions.spaceXL),
+              child: AboutMissionVisionSection(),
+            ),
           ),
-        ),
-      ],
+
+          // ── Section 3: Core IT Services ───────────────────
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: AppDimensions.spaceXL),
+              child: AboutServicesSection(),
+            ),
+          ),
+
+          // ── Section 4: Training Focus & Pillars ───────────
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: AppDimensions.spaceXL),
+              child: AboutTrainingSection(),
+            ),
+          ),
+
+          // ── Section 5: Company Details & Contact CTA ──────
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: AppDimensions.spaceXL),
+              child: AboutContactSection(),
+            ),
+          ),
+
+          // ── Brand Footer ──────────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.spaceMD,
+                AppDimensions.spaceXXL,
+                AppDimensions.spaceMD,
+                AppDimensions.space3XL,
+              ),
+              child: Column(
+                children: [
+                  const Divider(color: AppColors.neutral200),
+                  const SizedBox(height: AppDimensions.spaceMD),
+                  Text(
+                    AppStrings.appName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                      fontSize: AppTextSizes.sm,
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.spaceXXS),
+                  Text(
+                    AppStrings.appTagline,
+                    style: const TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.textSecondary,
+                      fontSize: AppTextSizes.xs,
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.spaceSM),
+                  const Text(
+                    '© 2026 CodeNova Tech Solutions. All rights reserved.',
+                    style: TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

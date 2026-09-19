@@ -212,6 +212,34 @@ abstract final class MockData {
           'and career prospects.',
     ),
   ];
+
+  // ── Verified Core Company Values (From website about section) ─
+  static const List<CompanyValueItem> companyValues = [
+    CompanyValueItem(
+      icon: Icons.lightbulb_outline_rounded,
+      title: 'Innovation',
+      description:
+          'Developing cutting-edge software solutions and empowering learners with modern technologies.',
+    ),
+    CompanyValueItem(
+      icon: Icons.verified_user_outlined,
+      title: 'Integrity',
+      description:
+          'Maintaining absolute transparency in training outcomes, certifications, and enterprise deliverables.',
+    ),
+    CompanyValueItem(
+      icon: Icons.auto_stories_outlined,
+      title: 'Continuous Learning',
+      description:
+          'Adapting our courses and architectures to the rapid evolutions of the global technology landscape.',
+    ),
+    CompanyValueItem(
+      icon: Icons.sentiment_very_satisfied_outlined,
+      title: 'Customer Satisfaction',
+      description:
+          'Creating long-term collaborative value for our students, clients, and industry partners.',
+    ),
+  ];
 }
 
 /// Data model for "Why Choose Us" verified benefit items.
@@ -226,3 +254,17 @@ class FeatureItem {
   final String title;
   final String description;
 }
+
+/// Data model for verified company core values.
+class CompanyValueItem {
+  const CompanyValueItem({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  final IconData icon;
+  final String title;
+  final String description;
+}
+
