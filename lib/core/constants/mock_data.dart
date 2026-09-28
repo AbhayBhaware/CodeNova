@@ -9,6 +9,15 @@ import '../../models/models.dart';
 abstract final class MockData {
   MockData._();
 
+  // ── Verified Course Categories ──────────────────────────────
+  static const List<String> courseCategories = [
+    'All',
+    'Web Development',
+    'Mobile Development',
+    'Programming',
+    'Data & AI',
+  ];
+
   // ── Verified Programs / Courses ──────────────────────────────
   static const List<CourseModel> courses = [
     CourseModel(
@@ -20,6 +29,7 @@ abstract final class MockData {
           'to build stunning responsive websites.',
       duration: '1 Month',
       level: CourseLevel.beginner,
+      category: 'Web Development',
       tags: ['HTML/CSS', 'JavaScript', 'React', 'Full Stack'],
       icon: Icons.code_rounded,
       isFeatured: true,
@@ -33,6 +43,7 @@ abstract final class MockData {
           'applications from scratch.',
       duration: '1 Month',
       level: CourseLevel.beginner,
+      category: 'Mobile Development',
       tags: ['Java', 'Kotlin', 'Android', 'Mobile'],
       icon: Icons.phone_android_rounded,
       isFeatured: true,
@@ -46,6 +57,7 @@ abstract final class MockData {
           'hands-on projects.',
       duration: '1 Month',
       level: CourseLevel.beginner,
+      category: 'Programming',
       tags: ['Python', 'OOP', 'Automation', 'Projects'],
       icon: Icons.terminal_rounded,
       isFeatured: true,
@@ -59,6 +71,7 @@ abstract final class MockData {
           'and real-world scenarios.',
       duration: '1 Month',
       level: CourseLevel.beginner,
+      category: 'Programming',
       tags: ['Java', 'OOP', 'Enterprise', 'Backend'],
       icon: Icons.computer_rounded,
       isFeatured: false,
@@ -72,6 +85,7 @@ abstract final class MockData {
           'data for actionable insights.',
       duration: '1 Month',
       level: CourseLevel.intermediate,
+      category: 'Data & AI',
       tags: ['Python', 'R', 'Machine Learning', 'Data Analysis'],
       icon: Icons.bar_chart_rounded,
       isFeatured: true,
@@ -85,25 +99,50 @@ abstract final class MockData {
           'applications with modern tools.',
       duration: '1 Month',
       level: CourseLevel.intermediate,
+      category: 'Data & AI',
       tags: ['AI', 'Neural Networks', 'Intelligent Systems'],
       icon: Icons.psychology_rounded,
       isFeatured: true,
     ),
   ];
 
+  // ── Internship Tech Filter Categories ────────────────────────
+  static const List<String> internshipCategories = [
+    'All',
+    'Full Stack',
+    'Mobile',
+    'Data & AI',
+  ];
+
   // ── Verified Internship Programmes ───────────────────────────
+  // All data verified from https://www.codenovatechsolutions.in/
   static const List<InternshipModel> internships = [
     InternshipModel(
       id: 'software-internship-program',
-      title: 'Internship Program',
+      title: 'Software Engineering Internship',
       domain: 'Live Client Projects & Software Engineering',
       duration: '3 – 6 Months',
       description:
           'Get real-world experience working on live projects with guidance '
           'from industry mentors. Build portfolio-grade applications and earn '
-          'a verified industry-recognized certification.',
+          'a verified industry-recognized certificate.',
       skills: ['Live Projects', 'Mentorship', 'Agile/Git', 'Full Stack'],
-      isOpen: true,
+      status: InternshipStatus.open,
+      mode: InternshipMode.hybrid,
+      icon: Icons.code_rounded,
+      techCategory: 'Full Stack',
+      responsibilities: [
+        'Collaborate on live client deliverables following Agile and Scrum workflows',
+        'Write clean, testable, and maintainable software code using version control (Git)',
+        'Participate in sprint reviews, mentor feedback sessions, and architecture discussions',
+        'Troubleshoot, debug, and document technical solutions across the stack',
+      ],
+      learningOutcomes: [
+        'End-to-end SDLC and production deployment experience on real client deliverables',
+        'Proficiency in professional Git workflows, pull requests, and peer code reviews',
+        'Portfolio-grade software system demonstrating full-stack problem solving',
+        'Industry-recognized, verifiable CodeNova Tech Solutions Internship Certificate',
+      ],
     ),
     InternshipModel(
       id: 'web-dev-internship',
@@ -114,7 +153,22 @@ abstract final class MockData {
           'Contribute to production-grade responsive web applications and '
           'APIs using modern frameworks under direct senior developer guidance.',
       skills: ['React', 'JavaScript', 'REST APIs', 'Responsive Design'],
-      isOpen: true,
+      status: InternshipStatus.open,
+      mode: InternshipMode.online,
+      icon: Icons.web_rounded,
+      techCategory: 'Full Stack',
+      responsibilities: [
+        'Develop responsive, mobile-first web pages using React and modern CSS',
+        'Consume and test REST APIs, ensuring robust error handling and loading states',
+        'Optimize web page load speeds, accessibility, and cross-browser consistency',
+        'Work closely with design leads to implement pixel-perfect user interfaces',
+      ],
+      learningOutcomes: [
+        'Modern frontend engineering with component-driven architecture',
+        'Real-world REST API consumption, asynchronous state handling, and data binding',
+        'Hands-on understanding of web deployment and production build optimization',
+        'Verifiable CodeNova Web Development Internship Certificate',
+      ],
     ),
     InternshipModel(
       id: 'python-ai-internship',
@@ -125,7 +179,22 @@ abstract final class MockData {
           'Apply machine learning and Python programming on real-world datasets '
           'and software automation pipelines.',
       skills: ['Python', 'Data Science', 'Machine Learning', 'APIs'],
-      isOpen: true,
+      status: InternshipStatus.open,
+      mode: InternshipMode.hybrid,
+      icon: Icons.psychology_rounded,
+      techCategory: 'Data & AI',
+      responsibilities: [
+        'Clean, preprocess, and visualize structured datasets for machine learning',
+        'Implement and evaluate machine learning models for classification and regression',
+        'Build Python scripts to automate repetitive workflows and data extraction',
+        'Document model accuracy metrics, performance benchmarks, and insights',
+      ],
+      learningOutcomes: [
+        'Applied machine learning pipeline development with Python',
+        'Practical automation script engineering and dataset processing techniques',
+        'Actionable business intelligence reporting and model performance evaluation',
+        'Verifiable CodeNova Python & AI Internship Certificate',
+      ],
     ),
   ];
 

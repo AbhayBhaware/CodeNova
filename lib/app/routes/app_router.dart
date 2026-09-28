@@ -5,10 +5,14 @@ import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/about/presentation/pages/about_page.dart';
 import '../../features/explore/presentation/pages/explore_page.dart';
 import '../../features/courses/presentation/pages/courses_page.dart';
+import '../../features/courses/presentation/pages/course_detail_page.dart';
 import '../../features/internships/presentation/pages/internships_page.dart';
+import '../../features/internships/presentation/pages/internship_detail_page.dart';
 import '../../features/services/presentation/pages/services_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/contact/presentation/pages/contact_page.dart';
+import '../../models/course_model.dart';
+import '../../models/internship_model.dart';
 import '../shell/main_shell.dart';
 
 /// Centralized GoRouter configuration.
@@ -67,6 +71,30 @@ final GoRouter appRouter = GoRouter(
               _fade(state, const CoursesPage()),
         ),
         GoRoute(
+          path: AppStrings.routeCourseDetail,
+          pageBuilder: (context, state) {
+            // The CourseModel is passed via GoRouter `extra`.
+            final course = state.extra as CourseModel?;
+            if (course == null) {
+              // Graceful fallback: return to courses listing.
+              return _fade(state, const CoursesPage());
+            }
+            return _slide(state, CourseDetailPage(course: course));
+          },
+        ),
+        GoRoute(
+          path: AppStrings.routeInternshipDetail,
+          pageBuilder: (context, state) {
+            // The InternshipModel is passed via GoRouter `extra`.
+            final internship = state.extra as InternshipModel?;
+            if (internship == null) {
+              // Graceful fallback: return to internships listing.
+              return _fade(state, const InternshipsPage());
+            }
+            return _slide(state, InternshipDetailPage(internship: internship));
+          },
+        ),
+        GoRoute(
           path: AppStrings.routeContact,
           pageBuilder: (context, state) =>
               _fade(state, const ContactPage()),
@@ -87,5 +115,23 @@ CustomTransitionPage<void> _fade(GoRouterState state, Widget child) {
       child: child,
     ),
     transitionDuration: const Duration(milliseconds: 220),
+  );
+}
+
+/// Produces a [CustomTransitionPage] with a slide-up animation (detail screens).
+CustomTransitionPage<void> _slide(GoRouterState state, Widget child) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final slide = Tween<Offset>(
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      ).animate(
+        CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+      );
+      return SlideTransition(position: slide, child: child);
+    },
+    transitionDuration: const Duration(milliseconds: 300),
   );
 }

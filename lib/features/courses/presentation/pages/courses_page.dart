@@ -1,254 +1,259 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/widgets/widgets.dart';
-import '../../../../models/models.dart';
+import '../controllers/courses_controller.dart';
+import '../widgets/courses_widgets.dart';
 
-/// All courses listing page with filter chips.
+/// The primary Courses Listing screen for CodeNova Tech Solutions.
+///
+/// Features:
+/// - Clean screen header with title, subtitle, and live programme count
+/// - Multi-field search (title, subtitle, description, category, tags)
+/// - Horizontal category and level filter chips
+/// - Decoupled state management via [CoursesController]
+/// - Loading skeleton placeholders, empty state with filter reset, and error retry state
+/// - Reusable [CourseCard] items with verified 1-Month duration and details sheet
+/// - Pull-to-refresh support
 class CoursesPage extends StatefulWidget {
-  const CoursesPage({super.key});
+  const CoursesPage({
+    super.key,
+    this.controller,
+  });
+
+  /// Optional controller injection (for tests or custom dependency injection).
+  final CoursesController? controller;
 
   @override
   State<CoursesPage> createState() => _CoursesPageState();
 }
 
 class _CoursesPageState extends State<CoursesPage> {
-  CourseLevel? _selectedLevel;
-
-  List<CourseModel> get _filtered => _selectedLevel == null
-      ? MockData.courses
-      : MockData.courses
-          .where((c) => c.level == _selectedLevel)
-          .toList();
+  late final CoursesController _controller;
+  bool _ownsController = false;
 
   @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-
-    return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.navCourses)),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── Filter Chips ────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.spaceMD,
-              AppDimensions.spaceMD,
-              AppDimensions.spaceMD,
-              0,
-            ),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _FilterChip(
-                    label: 'All',
-                    selected: _selectedLevel == null,
-                    onSelected: (_) =>
-                        setState(() => _selectedLevel = null),
-                  ),
-                  const SizedBox(width: AppDimensions.spaceSM),
-                  ...CourseLevel.values.map((level) => Padding(
-                        padding: const EdgeInsets.only(
-                            right: AppDimensions.spaceSM),
-                        child: _FilterChip(
-                          label: level.label,
-                          selected: _selectedLevel == level,
-                          onSelected: (_) =>
-                              setState(() => _selectedLevel = level),
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: AppDimensions.spaceSM),
-
-          // ── Course Count ────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.spaceMD),
-            child: Text(
-              '${_filtered.length} programme${_filtered.length != 1 ? 's' : ''} found',
-              style: tt.bodySmall,
-            ),
-          ),
-          const SizedBox(height: AppDimensions.spaceMD),
-
-          // ── Course List ─────────────────────────────────────
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.spaceMD),
-              itemCount: _filtered.length,
-              separatorBuilder: (_, _) =>
-                  const SizedBox(height: AppDimensions.spaceMD),
-              itemBuilder: (context, index) {
-                return _CourseListCard(course: _filtered[index]);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    if (widget.controller != null) {
+      _controller = widget.controller!;
+    } else {
+      _controller = CoursesController();
+      _ownsController = true;
+      _controller.loadCourses();
+    }
   }
-}
 
-// ── Filter Chip ──────────────────────────────────────────────────────────────
-
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.selected,
-    required this.onSelected,
-  });
-
-  final String label;
-  final bool selected;
-  final ValueChanged<bool> onSelected;
+  @override
+  void dispose() {
+    if (_ownsController) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final activeColor = isDark ? AppColors.accent : AppColors.primary;
+    final tt = theme.textTheme;
+    final canPop = Navigator.canPop(context);
 
-    return FilterChip(
-      label: Text(label),
-      selected: selected,
-      onSelected: onSelected,
-      selectedColor: activeColor.withAlpha(isDark ? 60 : 30),
-      checkmarkColor: activeColor,
-      labelStyle: TextStyle(
-        color: selected ? activeColor : AppColors.textSecondary,
-        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-        fontSize: AppTextSizes.sm,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Training Programmes'),
+        centerTitle: false,
+        leading: canPop
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                tooltip: 'Back',
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
       ),
-      side: BorderSide(
-        color: selected ? activeColor : theme.colorScheme.outline,
-      ),
-      backgroundColor:
-          isDark ? AppColors.backgroundSurface : AppColors.neutral100,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.radiusCircle),
-      ),
-    );
-  }
-}
-
-// ── Course Card ──────────────────────────────────────────────────────────────
-
-class _CourseListCard extends StatelessWidget {
-  const _CourseListCard({required this.course});
-
-  final CourseModel course;
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-
-    return AppCard.glass(
-      onTap: () {
-        // TODO: Navigate to course detail page when implemented
-      },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Icon
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              gradient: AppColors.brandGradient,
-              borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusMD),
-            ),
-            child: Icon(
-              course.icon,
-              color: Colors.white,
-              size: AppDimensions.iconMD,
-            ),
-          ),
-          const SizedBox(width: AppDimensions.spaceMD),
-
-          // Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+      body: SafeArea(
+        top: false,
+        child: RefreshIndicator(
+          onRefresh: () => _controller.loadCourses(forceRefresh: true),
+          color: AppColors.primary,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Screen Header & Search ──────────────────────────────
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppDimensions.spaceMD,
+                  AppDimensions.spaceXS,
+                  AppDimensions.spaceMD,
+                  AppDimensions.spaceSM,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        course.title,
-                        style: tt.titleMedium,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    Text(
+                      'Industry-focused 1-month technical training designed to make you job-ready.',
+                      style: tt.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                        height: 1.4,
                       ),
                     ),
-                    if (course.isFeatured)
-                      AppBadge(
-                        label: 'Featured',
-                        color: AppColors.secondary,
-                      ),
-                  ],
-                ),
-                const SizedBox(height: AppDimensions.spaceXS),
-                Text(
-                  course.subtitle,
-                  style: tt.bodySmall,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppDimensions.spaceSM),
-                Text(
-                  course.description,
-                  style: tt.bodySmall?.copyWith(
-                      color: AppColors.textSecondary),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppDimensions.spaceSM),
-                Row(
-                  children: [
-                    const Icon(Icons.access_time_rounded,
-                        size: 14, color: AppColors.textMuted),
-                    const SizedBox(width: AppDimensions.spaceXS),
-                    Text(course.duration, style: tt.bodySmall),
-                    const SizedBox(width: AppDimensions.spaceMD),
-                    AppBadge(
-                      label: course.level.label,
-                      color: _levelColor(course.level),
+                    const SizedBox(height: AppDimensions.spaceSM),
+                    CourseSearchBar(
+                      initialValue: _controller.searchQuery,
+                      onChanged: _controller.search,
                     ),
                   ],
                 ),
-                const SizedBox(height: AppDimensions.spaceSM),
-                Wrap(
-                  spacing: AppDimensions.spaceXS,
-                  runSpacing: AppDimensions.spaceXS,
-                  children: course.tags
-                      .map((tag) => AppBadge(
-                            label: tag,
-                            color: AppColors.primary,
-                          ))
-                      .toList(),
+              ),
+
+              // ── Category & Level Filters ────────────────────────────
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return CourseFilterBar(
+                    selectedCategory: _controller.selectedCategory,
+                    onCategorySelected: _controller.setCategory,
+                    selectedLevel: _controller.selectedLevel,
+                    onLevelSelected: _controller.setLevel,
+                  );
+                },
+              ),
+              const SizedBox(height: AppDimensions.spaceSM),
+
+              // ── Live Result Count Bar ───────────────────────────────
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.spaceMD,
                 ),
-              ],
-            ),
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    final count = _controller.filteredCount;
+                    final total = _controller.totalCount;
+                    final hasFilters = _controller.hasActiveFilters;
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          hasFilters
+                              ? '$count of $total programme${count != 1 ? 's' : ''}'
+                              : '$total available programme${total != 1 ? 's' : ''}',
+                          style: tt.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        if (hasFilters)
+                          InkWell(
+                            onTap: _controller.clearFilters,
+                            borderRadius:
+                                BorderRadius.circular(AppDimensions.radiusXS),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                'Clear filters',
+                                style: tt.bodySmall?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: AppDimensions.spaceSM),
+
+              // ── Course Catalog Content Area ─────────────────────────
+              Expanded(
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    switch (_controller.status) {
+                      case CoursesStatus.initial:
+                      case CoursesStatus.loading:
+                        return const CourseLoadingSkeleton(itemCount: 3);
+
+                      case CoursesStatus.error:
+                        return SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: 400,
+                            child: CourseErrorState(
+                              onRetry: _controller.retry,
+                              errorMessage: _controller.errorMessage,
+                            ),
+                          ),
+                        );
+
+                      case CoursesStatus.empty:
+                        return SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: 400,
+                            child: CourseEmptyState(
+                              onResetFilters: _controller.clearFilters,
+                              searchQuery: _controller.searchQuery,
+                              category: _controller.selectedCategory,
+                            ),
+                          ),
+                        );
+
+                      case CoursesStatus.success:
+                        final courses = _controller.courses;
+
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            final isWide = constraints.maxWidth >= 600;
+
+                            if (isWide) {
+                              return GridView.builder(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.spaceMD,
+                                  vertical: AppDimensions.spaceSM,
+                                ),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: AppDimensions.spaceMD,
+                                  mainAxisSpacing: AppDimensions.spaceMD,
+                                  childAspectRatio: 0.82,
+                                ),
+                                itemCount: courses.length,
+                                itemBuilder: (context, index) {
+                                  return CourseCard(course: courses[index]);
+                                },
+                              );
+                            }
+
+                            return ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics(),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.spaceMD,
+                                vertical: AppDimensions.spaceSM,
+                              ),
+                              itemCount: courses.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: AppDimensions.spaceMD),
+                              itemBuilder: (context, index) {
+                                return CourseCard(course: courses[index]);
+                              },
+                            );
+                          },
+                        );
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
-  }
-
-  Color _levelColor(CourseLevel level) {
-    switch (level) {
-      case CourseLevel.beginner:
-        return AppColors.success;
-      case CourseLevel.intermediate:
-        return AppColors.warning;
-      case CourseLevel.advanced:
-        return AppColors.secondary;
-    }
   }
 }

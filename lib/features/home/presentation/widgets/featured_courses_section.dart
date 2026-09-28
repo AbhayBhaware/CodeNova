@@ -25,7 +25,7 @@ class FeaturedCoursesSection extends StatelessWidget {
             title: AppStrings.featuredCoursesTitle,
             subtitle: AppStrings.featuredCoursesSubtitle,
             action: TextButton.icon(
-              onPressed: () => context.go(AppStrings.routeExplore),
+              onPressed: () => context.go(AppStrings.routeCourses),
               icon: const Text('View All'),
               label: const Icon(Icons.arrow_forward_rounded, size: 16),
             ),

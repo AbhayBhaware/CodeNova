@@ -43,6 +43,7 @@ abstract final class AppStrings {
   static const String routeCourses = '/courses';
   static const String routeCourseDetail = '/courses/:id';
   static const String routeInternships = '/internships';
+  static const String routeInternshipDetail = '/internships/:id';
   static const String routeServices = '/services';
   static const String routeProfile = '/profile';
   static const String routeContact = '/contact';

@@ -1,180 +1,225 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/widgets/widgets.dart';
-import '../../../../core/utils/app_utils.dart';
-import '../../../../models/models.dart';
+import '../controllers/internships_controller.dart';
+import '../widgets/internships_widgets.dart';
 
-/// Internships listing page – open and closed opportunities.
-class InternshipsPage extends StatelessWidget {
-  const InternshipsPage({super.key});
+/// The primary Internships Listing screen for CodeNova Tech Solutions.
+///
+/// Features:
+/// - Gradient apply banner with open position count and email/phone CTAs
+/// - Real-time text search across title, domain, description, and skills
+/// - Tech category filter chips and status filter chips
+/// - Live result count with clear-filters shortcut
+/// - Loading skeleton, empty state, and error retry state
+/// - Reusable [InternshipCard] items with modal detail sheet
+/// - Pull-to-refresh support
+class InternshipsPage extends StatefulWidget {
+  const InternshipsPage({
+    super.key,
+    this.controller,
+  });
+
+  /// Optional controller injection (for tests or custom DI).
+  final InternshipsController? controller;
 
   @override
-  Widget build(BuildContext context) {
-    final openInternships =
-        MockData.internships.where((i) => i.isOpen).toList();
-    final closedInternships =
-        MockData.internships.where((i) => !i.isOpen).toList();
-
-    return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.navInternships)),
-      body: ListView(
-        padding: AppDimensions.screenPadding,
-        children: [
-          const SizedBox(height: AppDimensions.spaceMD),
-
-          // ── Header ─────────────────────────────────────────
-          const SectionHeader(
-            title: 'Internship Programmes',
-            subtitle:
-                'Gain real-world experience and a certificate under expert mentorship.',
-          ),
-          const SizedBox(height: AppDimensions.spaceXL),
-
-          // ── Apply CTA ──────────────────────────────────────
-          AppCard(
-            gradient: AppColors.brandGradient,
-            padding: const EdgeInsets.all(AppDimensions.spaceLG),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Ready to apply?',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: AppTextSizes.subtitle,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: AppDimensions.spaceXS),
-                const Text(
-                  'Contact us directly to submit your application or enquire about available slots.',
-                  style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: AppTextSizes.body),
-                ),
-                const SizedBox(height: AppDimensions.spaceMD),
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.phone_rounded,
-                      size: 16, color: Colors.white),
-                  label: Text(
-                    AppStrings.phone,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () =>
-                      AppUtils.launchPhone(AppStrings.phoneDialable),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppDimensions.spaceXXL),
-
-          // ── Open Positions ─────────────────────────────────
-          if (openInternships.isNotEmpty) ...[
-            Row(
-              children: [
-                const AppBadge(label: 'Now Hiring', color: AppColors.success),
-                const SizedBox(width: AppDimensions.spaceSM),
-                Text(
-                  '${openInternships.length} open position${openInternships.length != 1 ? 's' : ''}',
-                  style: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: AppTextSizes.sm,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppDimensions.spaceMD),
-            ...openInternships.map(
-              (i) => Padding(
-                padding:
-                    const EdgeInsets.only(bottom: AppDimensions.spaceMD),
-                child: _InternshipCard(internship: i),
-              ),
-            ),
-          ],
-
-          // ── Closed Positions ───────────────────────────────
-          if (closedInternships.isNotEmpty) ...[
-            const SizedBox(height: AppDimensions.spaceMD),
-            const Text(
-              'Closed Positions',
-              style: TextStyle(
-                color: AppColors.textMuted,
-                fontSize: AppTextSizes.sm,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: AppDimensions.spaceMD),
-            ...closedInternships.map(
-              (i) => Padding(
-                padding:
-                    const EdgeInsets.only(bottom: AppDimensions.spaceMD),
-                child: _InternshipCard(internship: i),
-              ),
-            ),
-          ],
-
-          const SizedBox(height: AppDimensions.spaceXL),
-        ],
-      ),
-    );
-  }
+  State<InternshipsPage> createState() => _InternshipsPageState();
 }
 
-class _InternshipCard extends StatelessWidget {
-  const _InternshipCard({required this.internship});
+class _InternshipsPageState extends State<InternshipsPage> {
+  late final InternshipsController _controller;
+  bool _ownsController = false;
 
-  final InternshipModel internship;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.controller != null) {
+      _controller = widget.controller!;
+    } else {
+      _controller = InternshipsController();
+      _ownsController = true;
+      _controller.loadInternships();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_ownsController) _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final tt = theme.textTheme;
+    final isDark = theme.brightness == Brightness.dark;
 
-    return AppCard.glass(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Internships'),
+        centerTitle: false,
+      ),
+      body: SafeArea(
+        top: false,
+        child: RefreshIndicator(
+          onRefresh: () => _controller.loadInternships(forceRefresh: true),
+          color: AppColors.primary,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ── Apply Banner ────────────────────────────────────────
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return InternshipApplyBanner(
+                    openCount: _controller.openCount,
+                  );
+                },
+              ),
+
+              // ── Search Bar ──────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.spaceMD,
+                ),
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    return InternshipSearchBar(
+                      initialValue: _controller.searchQuery,
+                      onChanged: _controller.search,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: AppDimensions.spaceSM),
+
+              // ── Category Filter ─────────────────────────────────────
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return InternshipFilterBar(
+                    selectedCategory: _controller.selectedCategory,
+                    onCategorySelected: _controller.setCategory,
+                  );
+                },
+              ),
+              const SizedBox(height: AppDimensions.spaceSM),
+
+              // ── Result Count Bar ────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.spaceMD,
+                ),
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    final count = _controller.filteredCount;
+                    final total = _controller.totalCount;
+                    final hasFilters = _controller.hasActiveFilters;
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          hasFilters
+                              ? '$count of $total programme${count != 1 ? 's' : ''}'
+                              : '$total available programme${total != 1 ? 's' : ''}',
+                          style: tt.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondary,
+                          ),
+                        ),
+                        if (hasFilters)
+                          InkWell(
+                            onTap: _controller.clearFilters,
+                            borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusXS),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                'Clear filters',
+                                style: tt.bodySmall?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: AppDimensions.spaceSM),
+
+              // ── Content ─────────────────────────────────────────────
               Expanded(
-                child: Text(internship.title, style: tt.titleLarge),
-              ),
-              AppBadge(
-                label: internship.isOpen ? 'Open' : 'Closed',
-                color: internship.isOpen
-                    ? AppColors.success
-                    : AppColors.textMuted,
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    switch (_controller.status) {
+                      case InternshipsStatus.initial:
+                      case InternshipsStatus.loading:
+                        return const InternshipLoadingSkeleton(itemCount: 3);
+
+                      case InternshipsStatus.error:
+                        return SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: 400,
+                            child: InternshipErrorState(
+                              onRetry: _controller.retry,
+                              errorMessage: _controller.errorMessage,
+                            ),
+                          ),
+                        );
+
+                      case InternshipsStatus.empty:
+                        return SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: 380,
+                            child: InternshipEmptyState(
+                              onResetFilters: _controller.clearFilters,
+                              searchQuery: _controller.searchQuery,
+                              category: _controller.selectedCategory,
+                            ),
+                          ),
+                        );
+
+                      case InternshipsStatus.success:
+                        final internships = _controller.internships;
+
+                        return ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.spaceMD,
+                            vertical: AppDimensions.spaceSM,
+                          ),
+                          itemCount: internships.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: AppDimensions.spaceMD),
+                          itemBuilder: (context, index) {
+                            return InternshipCard(
+                              internship: internships[index],
+                            );
+                          },
+                        );
+                    }
+                  },
+                ),
               ),
             ],
           ),
-          const SizedBox(height: AppDimensions.spaceXS),
-          Text(
-            internship.domain,
-            style: tt.bodySmall?.copyWith(color: AppColors.accent),
-          ),
-          const SizedBox(height: AppDimensions.spaceSM),
-          Text(internship.description, style: tt.bodyMedium),
-          const SizedBox(height: AppDimensions.spaceMD),
-          Row(
-            children: [
-              const Icon(Icons.access_time_rounded,
-                  size: 14, color: AppColors.textMuted),
-              const SizedBox(width: AppDimensions.spaceXS),
-              Text(internship.duration, style: tt.bodySmall),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.spaceMD),
-          Wrap(
-            spacing: AppDimensions.spaceXS,
-            runSpacing: AppDimensions.spaceXS,
-            children: internship.skills
-                .map((s) => AppBadge(label: s, color: AppColors.primary))
-                .toList(),
-          ),
-        ],
+        ),
       ),
     );
   }
