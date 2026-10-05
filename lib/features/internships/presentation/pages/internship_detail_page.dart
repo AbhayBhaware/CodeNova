@@ -3,6 +3,7 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/app_utils.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../models/internship_model.dart';
+import 'internship_apply_page.dart';
 
 /// Full-screen premium Internship Details screen for CodeNova Tech Solutions.
 ///
@@ -1086,6 +1087,20 @@ class _InternshipApplicationSheet extends StatelessWidget {
 
           // Direct Actions
           AppButton(
+            label: 'Fill Online Application Form',
+            icon: Icons.edit_note_rounded,
+            isFullWidth: true,
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => InternshipApplyPage(internship: internship),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: AppDimensions.spaceSM),
+          AppButton.outline(
             label: 'Send Resume via Email',
             icon: Icons.email_rounded,
             isFullWidth: true,

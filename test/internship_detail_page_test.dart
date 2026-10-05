@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:codenova_app/core/constants/constants.dart';
 import 'package:codenova_app/models/internship_model.dart';
 import 'package:codenova_app/features/internships/presentation/pages/internship_detail_page.dart';
+import 'package:codenova_app/features/internships/presentation/pages/internship_apply_page.dart';
 
 void main() {
   setUpAll(() {
@@ -189,6 +190,7 @@ void main() {
 
       // Bottom sheet contents
       expect(find.text('Apply for Position'), findsOneWidget);
+      expect(find.text('Fill Online Application Form'), findsOneWidget);
       expect(find.text('Send Resume via Email'), findsOneWidget);
       expect(find.textContaining('Call CodeNova'), findsOneWidget);
 
@@ -198,6 +200,29 @@ void main() {
       await settle(tester);
 
       expect(find.text('Apply for Position'), findsNothing);
+    });
+
+    testWidgets(
+        'Tapping Fill Online Application Form navigates to InternshipApplyPage',
+        (tester) async {
+      await setupViewport(tester);
+
+      final internship = MockData.internships.first;
+      await tester.pumpWidget(buildTestApp(internship));
+      await settle(tester);
+
+      final applyButton = find.text('Apply Now');
+      await tester.tap(applyButton);
+      await settle(tester);
+
+      final formButton = find.text('Fill Online Application Form');
+      await tester.ensureVisible(formButton);
+      await tester.tap(formButton);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(InternshipApplyPage), findsOneWidget);
+      expect(find.text('Personal Details'), findsOneWidget);
+      expect(find.text('Submit Application'), findsOneWidget);
     });
 
     testWidgets('Tapping share button triggers SnackBar confirmation',

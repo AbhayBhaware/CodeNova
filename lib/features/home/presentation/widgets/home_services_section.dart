@@ -75,7 +75,16 @@ class _ServiceCard extends StatelessWidget {
     final tt = Theme.of(context).textTheme;
 
     return AppCard(
-      onTap: () => context.go(AppStrings.routeServices),
+      onTap: () {
+        try {
+          context.push(
+            AppStrings.routeServiceDetail.replaceFirst(':id', service.id),
+            extra: service,
+          );
+        } catch (_) {
+          context.go(AppStrings.routeServices);
+        }
+      },
       padding: const EdgeInsets.all(AppDimensions.spaceMD),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -8,11 +8,15 @@ import '../../features/courses/presentation/pages/courses_page.dart';
 import '../../features/courses/presentation/pages/course_detail_page.dart';
 import '../../features/internships/presentation/pages/internships_page.dart';
 import '../../features/internships/presentation/pages/internship_detail_page.dart';
+import '../../features/internships/presentation/pages/internship_apply_page.dart';
 import '../../features/services/presentation/pages/services_page.dart';
+import '../../features/services/presentation/pages/service_detail_page.dart';
+import '../../features/services/presentation/pages/quote_request_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/contact/presentation/pages/contact_page.dart';
 import '../../models/course_model.dart';
 import '../../models/internship_model.dart';
+import '../../models/service_model.dart';
 import '../shell/main_shell.dart';
 
 /// Centralized GoRouter configuration.
@@ -92,6 +96,36 @@ final GoRouter appRouter = GoRouter(
               return _fade(state, const InternshipsPage());
             }
             return _slide(state, InternshipDetailPage(internship: internship));
+          },
+        ),
+        GoRoute(
+          path: AppStrings.routeInternshipApply,
+          pageBuilder: (context, state) {
+            final internship = state.extra as InternshipModel?;
+            return _slide(
+              state,
+              InternshipApplyPage(internship: internship),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppStrings.routeServiceDetail,
+          pageBuilder: (context, state) {
+            final service = state.extra as ServiceModel?;
+            if (service == null) {
+              return _fade(state, const ServicesPage());
+            }
+            return _slide(state, ServiceDetailPage(service: service));
+          },
+        ),
+        GoRoute(
+          path: AppStrings.routeQuoteRequest,
+          pageBuilder: (context, state) {
+            final service = state.extra as ServiceModel?;
+            return _slide(
+              state,
+              QuoteRequestPage(initialService: service),
+            );
           },
         ),
         GoRoute(

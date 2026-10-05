@@ -198,61 +198,149 @@ abstract final class MockData {
     ),
   ];
 
+  // ── Verified Service Categories ──────────────────────────────
+  static const List<String> serviceCategories = [
+    'All',
+    'Web',
+    'Mobile',
+    'AI & Cloud',
+    'Security',
+    'Enterprise',
+  ];
+
   // ── Verified IT Services (From CodeNova Website) ─────────────
   static const List<ServiceModel> services = [
     ServiceModel(
       id: 'web-development',
       title: 'Web Application Development',
+      category: 'Web',
       description:
           'Modern, scalable web applications and digital platforms tailored '
           'to business needs with responsive architecture.',
       icon: Icons.web_rounded,
-      tags: ['React', 'Full Stack', 'Web Portals'],
+      tags: ['React', 'Next.js', 'Node.js', 'Full Stack'],
+      features: [
+        'Responsive mobile-first user interfaces engineered for speed',
+        'Scalable backend RESTful & GraphQL microservice APIs',
+        'Secure authentication, role-based access, and payment gateways',
+        'Production SEO optimization, caching, and analytics telemetry',
+      ],
+      deliverables: [
+        'Production-ready, tested web application codebase',
+        'Fully documented REST / GraphQL API endpoints',
+        'Automated deployment scripts and CI/CD setup',
+        'Post-launch warranty, documentation, and handoff support',
+      ],
     ),
     ServiceModel(
       id: 'mobile-development',
       title: 'Mobile App Development',
+      category: 'Mobile',
       description:
           'Native Android and cross-platform mobile applications engineered '
           'for performance and seamless user engagement.',
       icon: Icons.phone_android_rounded,
-      tags: ['Android', 'Flutter', 'Cross-Platform'],
+      tags: ['Flutter', 'Android', 'iOS', 'Cross-Platform'],
+      features: [
+        'High-performance single codebase targeting Android and iOS',
+        'Hardware integrations including camera, location, and sensors',
+        'Offline-first data architecture with secure SQLite/Hive caching',
+        'Pixel-perfect custom animations and responsive component layouts',
+      ],
+      deliverables: [
+        'Google Play Store & Apple App Store submission-ready packages',
+        'Complete Dart / Flutter source code with clean architecture',
+        'Comprehensive manual and automated UI test coverage reports',
+        'App store listing metadata and developer account onboarding',
+      ],
     ),
     ServiceModel(
       id: 'ai-solutions',
       title: 'AI & Machine Learning',
+      category: 'AI & Cloud',
       description:
           'Intelligent software solutions, neural network integrations, and '
           'data-driven automation to transform workflows.',
       icon: Icons.psychology_rounded,
-      tags: ['AI Models', 'Automation', 'ML Insights'],
+      tags: ['Python', 'Machine Learning', 'NLP', 'Data Models'],
+      features: [
+        'Custom predictive modeling and automated anomaly detection',
+        'Natural Language Processing (NLP) text processing and search',
+        'Automated ETL pipelines and business intelligence dashboards',
+        'Model training, evaluation metrics, and hyperparameter tuning',
+      ],
+      deliverables: [
+        'Packaged, tested Python model artifacts and serving scripts',
+        'REST API endpoints for real-time model inference',
+        'Validation, benchmark accuracy, and data drift audit reports',
+        'End-user analytics dashboard integrating model predictions',
+      ],
     ),
     ServiceModel(
       id: 'cloud-technologies',
       title: 'Cloud Technologies',
+      category: 'AI & Cloud',
       description:
           'Reliable cloud architecture, deployment management, and infrastructure '
           'solutions built for scale.',
       icon: Icons.cloud_done_rounded,
-      tags: ['Cloud Deploy', 'Scalability', 'DevOps'],
+      tags: ['AWS', 'Docker', 'DevOps', 'CI/CD Pipelines'],
+      features: [
+        'Automated CI/CD build, test, and zero-downtime deploy workflows',
+        'Containerized multi-service Docker architectures',
+        'Cloud cost optimization, resource scaling, and load balancers',
+        'Continuous uptime monitoring, log aggregation, and alerts',
+      ],
+      deliverables: [
+        'Reproducible Infrastructure-as-Code (IaC) configuration scripts',
+        'Secure IAM role permissions and network VPC topologies',
+        'Automated multi-region backup and failover procedures',
+        'Live system health and performance monitoring telemetry',
+      ],
     ),
     ServiceModel(
       id: 'cybersecurity',
       title: 'Cybersecurity Solutions',
+      category: 'Security',
       description:
           'Robust security practices, vulnerability mitigation, and secure '
           'digital system implementations.',
       icon: Icons.security_rounded,
-      tags: ['Security', 'Secure Code', 'Protection'],
+      tags: ['Security Audits', 'OWASP Top-10', 'Data Protection'],
+      features: [
+        'Comprehensive code security audits and static vulnerability scans',
+        'OWASP Top-10 web and API security hardening and remediation',
+        'Secure token authentication, OAuth2, and RBAC authorization',
+        'Data encryption standards for data at rest and in transit',
+      ],
+      deliverables: [
+        'Detailed vulnerability assessment and penetration test report',
+        'Remediated and hardened codebase patches with verified fixes',
+        'Security compliance, policy, and developer best-practices handbook',
+        'Automated dependency security scanner integration in CI/CD',
+      ],
     ),
     ServiceModel(
       id: 'custom-software',
       title: 'Custom Software Development',
+      category: 'Enterprise',
       description:
           'Bespoke digital software engineered to address unique business '
           'processes and digital transformation goals.',
       icon: Icons.code_rounded,
-      tags: ['Custom Systems', 'Enterprise', 'Scalable'],
+      tags: ['Enterprise Systems', 'Custom ERP', 'Workflow Automation'],
+      features: [
+        'Custom business process modeling and workflow digitalization',
+        'Multi-tenant enterprise databases engineered for high concurrency',
+        'Seamless integration with legacy systems and third-party SaaS APIs',
+        'Role-governed administrative portals with audit logging',
+      ],
+      deliverables: [
+        'Full intellectual property transfer of bespoke software solution',
+        'Modular, maintainable enterprise codebase and database schemas',
+        'Comprehensive user manuals and administrator operations runbooks',
+        'Dedicated SLA stabilization period and feature warranty support',
+      ],
     ),
   ];
 
