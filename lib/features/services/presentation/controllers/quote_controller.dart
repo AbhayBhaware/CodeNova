@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../../../../core/di/repository_registry.dart';
 import '../../../../models/quote_request_model.dart';
 import '../../data/repositories/quote_repository.dart';
 
@@ -21,7 +22,7 @@ enum QuoteSubmissionStatus {
 class QuoteController extends ChangeNotifier {
   QuoteController({
     QuoteRepository? repository,
-  }) : _repository = repository ?? const MockQuoteRepository();
+  }) : _repository = repository ?? RepositoryRegistry.instance.quoteRepository;
 
   final QuoteRepository _repository;
 

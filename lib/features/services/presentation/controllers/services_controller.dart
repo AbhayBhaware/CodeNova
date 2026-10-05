@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../../../../core/di/repository_registry.dart';
 import '../../../../models/service_model.dart';
 import '../../data/repositories/services_repository.dart';
 
@@ -9,7 +10,7 @@ enum ServicesStatus { initial, loading, success, empty, error }
 class ServicesController extends ChangeNotifier {
   ServicesController({
     ServicesRepository? repository,
-  }) : _repository = repository ?? const MockServicesRepository();
+  }) : _repository = repository ?? RepositoryRegistry.instance.servicesRepository;
 
   final ServicesRepository _repository;
 

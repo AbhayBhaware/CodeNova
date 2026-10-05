@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../../../../core/di/repository_registry.dart';
 import '../../../../models/course_model.dart';
 import '../../data/repositories/courses_repository.dart';
 
@@ -16,7 +17,7 @@ enum CoursesStatus {
 /// Extends [ChangeNotifier] for reactive updates and easy testability.
 class CoursesController extends ChangeNotifier {
   CoursesController({CoursesRepository? repository})
-      : _repository = repository ?? const MockCoursesRepository();
+      : _repository = repository ?? RepositoryRegistry.instance.coursesRepository;
 
   final CoursesRepository _repository;
 

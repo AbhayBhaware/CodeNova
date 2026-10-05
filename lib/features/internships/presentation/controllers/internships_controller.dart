@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../../../../core/di/repository_registry.dart';
 import '../../../../models/internship_model.dart';
 import '../../data/repositories/internships_repository.dart';
 
@@ -16,7 +17,7 @@ enum InternshipsStatus { initial, loading, success, empty, error }
 class InternshipsController extends ChangeNotifier {
   InternshipsController({
     InternshipsRepository? repository,
-  }) : _repository = repository ?? const MockInternshipsRepository();
+  }) : _repository = repository ?? RepositoryRegistry.instance.internshipsRepository;
 
   final InternshipsRepository _repository;
 

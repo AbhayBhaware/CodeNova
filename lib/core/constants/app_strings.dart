@@ -15,8 +15,12 @@ abstract final class AppStrings {
   static const String phone = '+91 8087480411';
   static const String phoneDialable = '+918087480411';
   static const String email = 'contact@codenovatechsolutions.in';
+  static const String emailSecondary = 'codenovatechservies@gmail.com';
   static const String website = 'https://www.codenovatechsolutions.in';
   static const String address = 'Pune, Maharashtra, India';
+  static const String officeHours = 'Monday – Saturday: 9:30 AM – 6:30 PM IST';
+  static const String officeHoursShort = 'Mon – Sat: 9:30 AM – 6:30 PM';
+  static const String responseSLA = '24 to 48 Business Hours';
 
   // ── Mission & Vision ─────────────────────────────────────────
   static const String mission =
@@ -50,6 +54,8 @@ abstract final class AppStrings {
   static const String routeQuoteRequest = '/services/quote';
   static const String routeProfile = '/profile';
   static const String routeContact = '/contact';
+  static const String routeAdminLogin = '/admin/login';
+  static const String routeAdminDashboard = '/admin/dashboard';
 
   // ── Hero Section (Verified from website) ─────────────────────
   static const String heroEyebrow = '🚀 IT Training & Internship Platform';

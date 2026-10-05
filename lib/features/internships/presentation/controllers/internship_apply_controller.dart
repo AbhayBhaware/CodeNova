@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+
+import '../../../../core/di/repository_registry.dart';
 import '../../../../models/internship_application_model.dart';
 import '../../data/repositories/internship_application_repository.dart';
 
@@ -22,7 +24,7 @@ class InternshipApplyController extends ChangeNotifier {
   InternshipApplyController({
     InternshipApplicationRepository? repository,
   }) : _repository =
-            repository ?? const MockInternshipApplicationRepository();
+            repository ?? RepositoryRegistry.instance.internshipApplicationRepository;
 
   final InternshipApplicationRepository _repository;
 

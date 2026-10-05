@@ -14,6 +14,9 @@ import '../../features/services/presentation/pages/service_detail_page.dart';
 import '../../features/services/presentation/pages/quote_request_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/contact/presentation/pages/contact_page.dart';
+import '../../features/admin/presentation/controllers/admin_auth_controller.dart';
+import '../../features/admin/presentation/pages/admin_login_page.dart';
+import '../../features/admin/presentation/pages/admin_dashboard_page.dart';
 import '../../models/course_model.dart';
 import '../../models/internship_model.dart';
 import '../../models/service_model.dart';
@@ -27,10 +30,41 @@ import '../shell/main_shell.dart';
 /// Nav-tab routes:  /  /explore  /internships  /services  /profile
 /// Deep-link routes (still accessible, no tab highlight):
 ///   /about  /courses  /contact
+/// Isolated Admin Portal routes:
+///   /admin/login  /admin/dashboard
 final GoRouter appRouter = GoRouter(
   initialLocation: AppStrings.routeHome,
   debugLogDiagnostics: false,
+  refreshListenable: AdminAuthController.instance,
+  redirect: (context, state) {
+    final isGoingToAdmin = state.matchedLocation.startsWith('/admin');
+    final isAtLogin = state.matchedLocation == AppStrings.routeAdminLogin;
+    final isAuthenticated = AdminAuthController.instance.isAuthenticated;
+
+    if (isGoingToAdmin) {
+      if (!isAuthenticated && !isAtLogin) {
+        return AppStrings.routeAdminLogin;
+      }
+      if (isAuthenticated && isAtLogin) {
+        return AppStrings.routeAdminDashboard;
+      }
+    }
+    return null;
+  },
   routes: [
+    // ── Admin routes (isolated from mobile bottom nav shell) ────
+    GoRoute(
+      path: AppStrings.routeAdminLogin,
+      pageBuilder: (context, state) =>
+          _fade(state, const AdminLoginPage()),
+    ),
+    GoRoute(
+      path: AppStrings.routeAdminDashboard,
+      pageBuilder: (context, state) =>
+          _fade(state, const AdminDashboardPage()),
+    ),
+
+    // ── Student / Public Mobile Shell ─────────────────────────
     ShellRoute(
       builder: (context, state, child) => MainShell(child: child),
       routes: [

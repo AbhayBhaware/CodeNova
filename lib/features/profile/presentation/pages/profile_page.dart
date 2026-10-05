@@ -193,16 +193,31 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
 
-          // ── App Version footer ────────────────────────────
+          // ── App Version & Staff Portal footer ─────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(AppDimensions.spaceXXL),
-              child: Center(
-                child: Text(
-                  'CodeNova Tech Solutions\nv1.0.0 (Build 1)',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    'CodeNova Tech Solutions\nv1.0.0 (Build 1)',
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppDimensions.spaceMD),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    icon: const Icon(Icons.admin_panel_settings_outlined, size: 16),
+                    label: const Text(
+                      'Staff & Admin Portal',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () => context.go(AppStrings.routeAdminLogin),
+                  ),
+                ],
               ),
             ),
           ),
