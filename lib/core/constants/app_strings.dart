@@ -76,11 +76,11 @@ abstract final class AppStrings {
   static const String featuredCoursesSubtitle =
       'Comprehensive training paths designed for your success in tech.';
 
-  static const String internshipSectionTitle = 'Internship Program';
+  static const String internshipSectionTitle = 'Internships';
   static const String internshipSectionSubtitle =
-      'Get real-world experience working on live projects with guidance from industry mentors.';
+      'Gain hands-on industry experience on live client projects with mentor guidance.';
 
-  static const String servicesSectionTitle = 'IT Services & Solutions';
+  static const String servicesSectionTitle = 'Services';
   static const String servicesSectionSubtitle =
       'Scalable, modern digital solutions engineered for businesses and startups.';
 

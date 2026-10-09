@@ -3,13 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:codenova_app/app/app.dart';
 import 'package:codenova_app/features/home/presentation/pages/home_page.dart';
-import 'package:codenova_app/features/home/presentation/widgets/hero_section.dart';
-import 'package:codenova_app/features/home/presentation/widgets/featured_courses_section.dart';
 import 'package:codenova_app/features/home/presentation/widgets/home_internship_section.dart';
 import 'package:codenova_app/features/home/presentation/widgets/home_services_section.dart';
+import 'package:codenova_app/features/home/presentation/widgets/hero_section.dart';
+import 'package:codenova_app/features/home/presentation/widgets/featured_courses_section.dart';
 import 'package:codenova_app/features/home/presentation/widgets/why_choose_section.dart';
 import 'package:codenova_app/features/home/presentation/widgets/home_testimonials_section.dart';
 import 'package:codenova_app/features/home/presentation/widgets/cta_banner_section.dart';
+import 'package:codenova_app/features/internships/presentation/pages/internships_page.dart';
+import 'package:codenova_app/features/services/presentation/pages/services_page.dart';
+
+import 'package:codenova_app/app/routes/app_router.dart';
 import 'package:codenova_app/core/constants/constants.dart';
 
 void main() {
@@ -17,8 +21,13 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
+  setUp(() {
+    appRouter.go(AppStrings.routeHome);
+  });
+
   group('HomePage Integration Tests', () {
-    testWidgets('Renders complete Home Screen with all verified sections',
+    testWidgets(
+        'Renders streamlined Home Screen with only Internships and Services sections',
         (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.625;
@@ -33,53 +42,37 @@ void main() {
       expect(find.text('CodeNova'), findsWidgets);
       expect(find.byTooltip('Notifications'), findsOneWidget);
 
-      // 2. Verify Hero Section with verified title & stats
-      expect(find.byType(HeroSection), findsOneWidget);
-      expect(find.text(AppStrings.heroTitle), findsOneWidget);
-      expect(find.text(AppStrings.statsStudentsValue), findsOneWidget);
-      expect(find.text(AppStrings.statsPartnersValue), findsOneWidget);
-      expect(find.text(AppStrings.heroCtaPrimary), findsOneWidget);
-
-      // 3. Verify Courses Section
-      expect(find.byType(FeaturedCoursesSection), findsOneWidget);
-      expect(find.text('Full Stack Development'), findsOneWidget);
-      expect(find.text('View Details'), findsWidgets);
-
-      // 4. Verify Internship Section
+      // 2. Verify Section 1: Internships (exactly 2 domain internships + View All)
       expect(find.byType(HomeInternshipSection), findsOneWidget);
-      expect(find.text('Explore Internships'), findsWidgets);
+      expect(find.text('Internships'), findsWidgets);
+      expect(find.text('Software Engineering Internship'), findsOneWidget);
+      expect(find.text('Web Development Internship'), findsOneWidget);
+      // 3rd internship must NOT be on home page
+      expect(find.text('Python & AI Internship'), findsNothing);
+      expect(find.text('View All Internships'), findsOneWidget);
 
-      // Scroll down to view remaining sections in CustomScrollView
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
+      // Scroll down if needed
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -400));
       await tester.pumpAndSettle();
 
-      // 5. Verify Services Section
+      // 3. Verify Section 2: Services (exactly 2 services + View All)
       expect(find.byType(HomeServicesSection), findsOneWidget);
+      expect(find.text('Services'), findsWidgets);
       expect(find.text('Web Application Development'), findsOneWidget);
+      expect(find.text('Mobile App Development'), findsOneWidget);
+      // 3rd service must NOT be on home page
+      expect(find.text('AI & Machine Learning'), findsNothing);
+      expect(find.text('View All Services'), findsOneWidget);
 
-      // Scroll further down
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
-      await tester.pumpAndSettle();
-
-      // 6. Verify Benefits Section (verified claims)
-      expect(find.byType(WhyChooseSection), findsOneWidget);
-      expect(find.text('Expert Mentors'), findsOneWidget);
-
-      // 7. Verify Testimonials Section (clearly marked placeholder)
-      expect(find.byType(HomeTestimonialsSection), findsOneWidget);
-      expect(find.text('Verified Student Reviews & Feedback'), findsOneWidget);
-
-      // Scroll to bottom
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
-      await tester.pumpAndSettle();
-
-      // 8. Verify Contact CTA Section
-      expect(find.byType(CtaBannerSection), findsOneWidget);
-      expect(find.text('Enquire Now'), findsWidgets);
-      expect(find.text('Call Support'), findsOneWidget);
+      // 4. Verify Removed / Unwanted sections are NOT present on HomePage
+      expect(find.byType(HeroSection), findsNothing);
+      expect(find.byType(FeaturedCoursesSection), findsNothing);
+      expect(find.byType(WhyChooseSection), findsNothing);
+      expect(find.byType(HomeTestimonialsSection), findsNothing);
+      expect(find.byType(CtaBannerSection), findsNothing);
     });
 
-    testWidgets('Tapping View Details opens modal sheet with full course info',
+    testWidgets('Tapping View All Internships navigates to internships listing',
         (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.625;
@@ -88,25 +81,39 @@ void main() {
       await tester.pumpWidget(const CodeNovaApp());
       await tester.pumpAndSettle();
 
-      // Find first "View Details" button
-      final viewDetailsFinder = find.text('View Details').first;
-      expect(viewDetailsFinder, findsOneWidget);
+      final viewAllBtn = find.text('View All Internships');
+      expect(viewAllBtn, findsOneWidget);
 
-      await tester.ensureVisible(viewDetailsFinder);
+      await tester.ensureVisible(viewAllBtn);
       await tester.pumpAndSettle();
 
-      await tester.tap(viewDetailsFinder);
+      await tester.tap(viewAllBtn);
       await tester.pumpAndSettle();
 
-      // Modal sheet should now be visible with syllabus and Enquire button
-      expect(find.text('About this Program'), findsOneWidget);
-      expect(find.text('Key Technologies & Topics'), findsOneWidget);
-      expect(find.text('Enquire Now'), findsWidgets);
-      expect(find.text('Close'), findsOneWidget);
+      // Should navigate to InternshipsPage
+      expect(find.byType(InternshipsPage), findsOneWidget);
+    });
 
-      // Dismiss modal
-      await tester.tap(find.text('Close'));
+    testWidgets('Tapping View All Services navigates to services listing',
+        (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.625;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      await tester.pumpWidget(const CodeNovaApp());
       await tester.pumpAndSettle();
+
+      final viewAllServicesBtn = find.text('View All Services');
+      expect(viewAllServicesBtn, findsOneWidget);
+
+      await tester.ensureVisible(viewAllServicesBtn);
+      await tester.pumpAndSettle();
+
+      await tester.tap(viewAllServicesBtn);
+      await tester.pumpAndSettle();
+
+      // Should navigate to ServicesPage
+      expect(find.byType(ServicesPage), findsOneWidget);
     });
 
     testWidgets('Tapping Notifications opens notifications bottom sheet',
@@ -133,3 +140,4 @@ void main() {
     });
   });
 }
+

@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/constants.dart';
-import '../widgets/hero_section.dart';
-import '../widgets/featured_courses_section.dart';
 import '../widgets/home_internship_section.dart';
 import '../widgets/home_services_section.dart';
-import '../widgets/why_choose_section.dart';
-import '../widgets/home_testimonials_section.dart';
-import '../widgets/cta_banner_section.dart';
 
 /// The main landing / home screen for CodeNova Tech Solutions.
 ///
-/// Responsive, premium, and fully integrated with the company's verified
-/// brand identity and design system tokens.
+/// Features a clean, uncluttered layout focused on:
+/// 1. Internships – displaying 2 domain internships with a "View All" option.
+/// 2. Services – displaying 2 IT services with a "View All" option.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -140,36 +136,22 @@ class HomePage extends StatelessWidget {
 
           // ── Content Sections ───────────────────────────────────
           SliverToBoxAdapter(
-            child: Column(
-              children: const [
-                // 1. Hero Section (Headline, description, CTAs, verified stats)
-                HeroSection(),
-                SizedBox(height: AppDimensions.spaceXL),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: AppDimensions.spaceMD,
+                bottom: AppDimensions.space3XL,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  // 1. Internships Section (2 domain internships + View All)
+                  HomeInternshipSection(),
+                  SizedBox(height: AppDimensions.spaceXXL),
 
-                // 2. Courses Section (Verified 1-month programs with View Details)
-                FeaturedCoursesSection(),
-                SizedBox(height: AppDimensions.spaceXL),
-
-                // 3. Internship Highlights Section (Live projects & mentorship)
-                HomeInternshipSection(),
-                SizedBox(height: AppDimensions.spaceXL),
-
-                // 4. IT Services Section (Web, Mobile, AI/ML, Cloud, Security)
-                HomeServicesSection(),
-                SizedBox(height: AppDimensions.spaceXL),
-
-                // 5. Company Benefits ("Why Choose CodeNova" verified claims)
-                WhyChooseSection(),
-                SizedBox(height: AppDimensions.spaceXL),
-
-                // 6. Testimonials Section (Clearly marked placeholder)
-                HomeTestimonialsSection(),
-                SizedBox(height: AppDimensions.spaceXL),
-
-                // 7. Contact CTA Banner (Enquiry call to action)
-                CtaBannerSection(),
-                SizedBox(height: AppDimensions.space3XL),
-              ],
+                  // 2. Services Section (2 services + View All)
+                  HomeServicesSection(),
+                ],
+              ),
             ),
           ),
         ],

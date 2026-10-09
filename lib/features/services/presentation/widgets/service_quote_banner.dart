@@ -30,7 +30,7 @@ class ServiceQuoteBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Eyebrow tag
-          Row(
+          Wrap(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -54,9 +54,12 @@ class ServiceQuoteBanner extends StatelessWidget {
                       size: 14,
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      'ENTERPRISE & STARTUP SOLUTIONS',
-                      style: AppTypography.overline(color: Colors.white),
+                    Flexible(
+                      child: Text(
+                        'ENTERPRISE & STARTUP SOLUTIONS',
+                        style: AppTypography.overline(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),

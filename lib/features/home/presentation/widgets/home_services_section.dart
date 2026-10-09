@@ -4,15 +4,22 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../models/models.dart';
 
-/// IT Services Section on [HomePage].
+/// Services Section on [HomePage].
 ///
-/// Displays company IT services using reusable modern cards.
+/// Displays 2 highlighted IT services with a prominent "View All" option
+/// beneath navigating directly to the full [ServicesPage].
 class HomeServicesSection extends StatelessWidget {
-  const HomeServicesSection({super.key});
+  const HomeServicesSection({
+    super.key,
+    this.services,
+  });
+
+  /// Optional services list override (e.g. for testing). Defaults to [MockData.services].
+  final List<ServiceModel>? services;
 
   @override
   Widget build(BuildContext context) {
-    final services = MockData.services;
+    final list = (services ?? MockData.services).take(2).toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceMD),
@@ -25,33 +32,40 @@ class HomeServicesSection extends StatelessWidget {
             subtitle: AppStrings.servicesSectionSubtitle,
             action: TextButton.icon(
               onPressed: () => context.go(AppStrings.routeServices),
-              icon: const Text('All Services'),
+              icon: const Text('View All'),
               label: const Icon(Icons.arrow_forward_rounded, size: 16),
             ),
           ),
           const SizedBox(height: AppDimensions.spaceMD),
 
-          // ── Reusable Service Cards Grid / List ────────────────
+          // ── 2 Services Displayed ─────────────────────────────
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: services.length > 4 ? 4 : services.length,
+            padding: EdgeInsets.zero,
+            itemCount: list.length,
             separatorBuilder: (_, _) =>
                 const SizedBox(height: AppDimensions.spaceMD),
             itemBuilder: (context, index) {
-              return _ServiceCard(service: services[index]);
+              return _ServiceCard(service: list[index]);
             },
           ),
           const SizedBox(height: AppDimensions.spaceMD),
 
-          // View All Services Button
-          Center(
+          // ── Under It: View All Option ────────────────────────
+          SizedBox(
+            width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () => context.go(AppStrings.routeServices),
-              icon: const Icon(Icons.business_center_outlined, size: 16),
-              label: const Text('View All IT Services'),
+              icon: const Icon(Icons.business_center_outlined, size: 18),
+              label: const Text('View All Services'),
               style: OutlinedButton.styleFrom(
-                padding: AppDimensions.buttonPadding,
+                foregroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppDimensions.spaceSM + 4,
+                  horizontal: AppDimensions.spaceMD,
+                ),
+                side: const BorderSide(color: AppColors.primary, width: 1.4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
                 ),
@@ -89,17 +103,24 @@ class _ServiceCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon Container
+          // Icon Container with Brand Gradient
           Container(
-            width: 44,
-            height: 44,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: AppColors.primary.withAlpha(20),
+              gradient: AppColors.brandGradient,
               borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withAlpha(35),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Icon(
               service.icon,
-              color: AppColors.primary,
+              color: Colors.white,
               size: AppDimensions.iconMD,
             ),
           ),
@@ -113,16 +134,16 @@ class _ServiceCard extends StatelessWidget {
                 Text(
                   service.title,
                   style: tt.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     fontSize: AppTextSizes.bodyLg,
                   ),
                 ),
-                const SizedBox(height: AppDimensions.spaceXXS),
+                const SizedBox(height: AppDimensions.spaceXXS + 1),
                 Text(
                   service.description,
                   style: tt.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
-                    height: 1.4,
+                    height: 1.45,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
